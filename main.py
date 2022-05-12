@@ -22,7 +22,8 @@ def main():
                 'https://dvmn.org/api/long_polling/',
                 headers=headers,
                 timeout=90,
-                params=payload).json()
+                params=payload)
+            response.raise_for_status()
         except requests.exceptions.ReadTimeout:
             print('Таймаут соединения')
             sleep(5)
@@ -31,8 +32,9 @@ def main():
             print('Потеряно соединение с сервером')
             sleep(5)
             continue
-        if response['status'] == 'found':
-            for attempt in response['new_attempts']:
+        responsed_data = response.json()
+        if responsed_data['status'] == 'found':
+            for attempt in responsed_data['new_attempts']:
                 message = 'Преподаватель проверил работу "{}"\n{}'.format(
                     attempt['lesson_title'],
                     attempt['lesson_url'],
@@ -42,8 +44,8 @@ def main():
                 else:
                     message += '\n Работа сдана'
                 BotMessage(telegram_id, message)
-            payload['timestamp'] = response['last_attempt_timestamp']
-        elif response['status'] == 'timeout':
+            payload['timestamp'] = responsed_data['last_attempt_timestamp']
+        elif responsed_data['status'] == 'timeout':
             print('Keep waiting')
             payload['timestamp'] = response['timestamp_to_request']
 
