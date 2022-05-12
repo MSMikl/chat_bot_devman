@@ -1,14 +1,15 @@
-import asyncio
 from time import sleep
 
-import telegram
 import requests
 
 from environs import Env
 
+from tbot import BotMessage
+
 env = Env()
 env.read_env()
 token = env('DEVMAN_TOKEN')
+telegram_id = env.int('TG_ID')
 headers = {
     'Authorization':'Token {}'.format(token)
 }
@@ -29,7 +30,7 @@ while True:
         sleep(5)
         continue
     if response['status'] == 'found':
-        print (response)
+        BotMessage(telegram_id, 'Преподаватель проверил работу!')
         payload['timestamp'] = response['last_attempt_timestamp']
     elif response['status'] == 'timeout':
         print('Keep waiting')
