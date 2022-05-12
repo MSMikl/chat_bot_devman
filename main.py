@@ -44,7 +44,6 @@ def main():
                 BotMessage(telegram_id, message)
             payload['timestamp'] = responsed_data['last_attempt_timestamp']
         elif responsed_data['status'] == 'timeout':
-            print('Keep waiting')
             payload['timestamp'] = response['timestamp_to_request']
 
 
