@@ -11,7 +11,7 @@ def main():
     env = Env()
     env.read_env()
     token = env('DEVMAN_TOKEN')
-    telegram_id = env.int('TG_ID')
+    telegram_id = env.int('TG_USER_ID')
     headers = {
         'Authorization': 'Token {}'.format(token)
     }
