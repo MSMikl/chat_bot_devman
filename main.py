@@ -25,8 +25,6 @@ def main():
                 params=payload)
             response.raise_for_status()
         except requests.exceptions.ReadTimeout:
-            print('Таймаут соединения')
-            sleep(5)
             continue
         except requests.exceptions.ConnectionError:
             print('Потеряно соединение с сервером')
