@@ -30,7 +30,16 @@ while True:
         sleep(5)
         continue
     if response['status'] == 'found':
-        BotMessage(telegram_id, 'Преподаватель проверил работу!')
+        for attempt in response['new_attempts']:
+            message = 'Преподаватель проверил работу "{}"\n{}'.format(
+                attempt['lesson_title'],
+                attempt['lesson_url'],
+            )
+            if attempt['is_negative']:
+                message += '\n Пока неудачно'
+            else:
+                message += '\n Работа сдана'
+            BotMessage(telegram_id, message)
         payload['timestamp'] = response['last_attempt_timestamp']
     elif response['status'] == 'timeout':
         print('Keep waiting')
