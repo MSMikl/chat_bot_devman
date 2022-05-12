@@ -11,7 +11,7 @@ env.read_env()
 token = env('DEVMAN_TOKEN')
 telegram_id = env.int('TG_ID')
 headers = {
-    'Authorization':'Token {}'.format(token)
+    'Authorization': 'Token {}'.format(token)
 }
 payload = {}
 while True:
