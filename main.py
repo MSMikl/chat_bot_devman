@@ -1,3 +1,5 @@
+from time import sleep
+
 import requests
 from environs import Env
 
@@ -16,6 +18,12 @@ while True:
             timeout=90,
             params=payload).json()
     except requests.exceptions.ReadTimeout:
+        print('Таймаут соединения')
+        sleep(5)
+        continue
+    except requests.exceptions.ConnectionError:
+        print('Потеряно соединение с сервером')
+        sleep(5)
         continue
     if response['status'] == 'found':
         print (response)
