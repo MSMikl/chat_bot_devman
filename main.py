@@ -4,7 +4,7 @@ import requests
 
 from environs import Env
 
-from tbot import BotMessage
+from tbot import bot_message
 
 
 def main():
@@ -41,7 +41,7 @@ def main():
                     message += '\n Пока неудачно'
                 else:
                     message += '\n Работа сдана'
-                BotMessage(telegram_id, message)
+                bot_message(telegram_id, message)
             payload['timestamp'] = responsed_data['last_attempt_timestamp']
         elif responsed_data['status'] == 'timeout':
             payload['timestamp'] = response['timestamp_to_request']
