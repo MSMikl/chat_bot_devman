@@ -1,6 +1,9 @@
+import asyncio
 from time import sleep
 
+import telegram
 import requests
+
 from environs import Env
 
 env = Env()
