@@ -30,9 +30,9 @@ def main():
             print('Потеряно соединение с сервером')
             sleep(5)
             continue
-        responsed_data = response.json()
-        if responsed_data['status'] == 'found':
-            for attempt in responsed_data['new_attempts']:
+        review_info = response.json()
+        if review_info['status'] == 'found':
+            for attempt in review_info['new_attempts']:
                 message = 'Преподаватель проверил работу "{}"\n{}'.format(
                     attempt['lesson_title'],
                     attempt['lesson_url'],
@@ -42,8 +42,8 @@ def main():
                 else:
                     message += '\n Работа сдана'
                 bot_message(telegram_id, message)
-            payload['timestamp'] = responsed_data['last_attempt_timestamp']
-        elif responsed_data['status'] == 'timeout':
+            payload['timestamp'] = review_info['last_attempt_timestamp']
+        elif review_info['status'] == 'timeout':
             payload['timestamp'] = response['timestamp_to_request']
 
 
