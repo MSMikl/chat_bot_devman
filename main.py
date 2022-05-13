@@ -1,21 +1,23 @@
 from time import sleep
 
 import requests
+import telegram
 
 from environs import Env
-
-from tbot import bot_message
 
 
 def main():
     env = Env()
     env.read_env()
-    token = env('DEVMAN_TOKEN')
+    dvmn_token = env('DEVMAN_TOKEN')
     telegram_id = env.int('TG_USER_ID')
+    tg_token = env('TELEGRAM_TOKEN')
+    tbot = telegram.Bot(token=tg_token)
     headers = {
-        'Authorization': 'Token {}'.format(token)
+        'Authorization': 'Token {}'.format(dvmn_token)
     }
     payload = {}
+
     while True:
         try:
             response = requests.get(
@@ -41,7 +43,7 @@ def main():
                     message += '\n Пока неудачно'
                 else:
                     message += '\n Работа сдана'
-                bot_message(telegram_id, message)
+                tbot.sendMessage(telegram_id, message)
             payload['timestamp'] = review_info['last_attempt_timestamp']
         elif review_info['status'] == 'timeout':
             payload['timestamp'] = response['timestamp_to_request']
