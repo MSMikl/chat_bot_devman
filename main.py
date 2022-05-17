@@ -1,9 +1,10 @@
 from time import sleep
 
+import logging
 import os
+
 import requests
 import telegram
-
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
         'Authorization': 'Token {}'.format(dvmn_token)
     }
     payload = {}
-
+    logging.warning('Бот запущен')
     while True:
         try:
             response = requests.get(
