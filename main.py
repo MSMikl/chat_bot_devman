@@ -1,17 +1,15 @@
 from time import sleep
 
+import os
 import requests
 import telegram
 
-from environs import Env
 
 
 def main():
-    env = Env()
-    env.read_env()
-    dvmn_token = env('DEVMAN_TOKEN')
-    telegram_id = env.int('TG_USER_ID')
-    tg_token = env('TELEGRAM_TOKEN')
+    dvmn_token = os.getenv('DEVMAN_TOKEN')
+    telegram_id = int(os.getenv('TG_USER_ID'))
+    tg_token = os.getenv('TELEGRAM_TOKEN')
     tbot = telegram.Bot(token=tg_token)
     headers = {
         'Authorization': 'Token {}'.format(dvmn_token)
