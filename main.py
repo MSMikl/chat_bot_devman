@@ -7,16 +7,31 @@ import requests
 import telegram
 
 
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 def main():
     dvmn_token = os.getenv('DEVMAN_TOKEN')
     telegram_id = int(os.getenv('TG_USER_ID'))
     tg_token = os.getenv('TELEGRAM_TOKEN')
     tbot = telegram.Bot(token=tg_token)
+    logger = logging.getLogger('tbot')
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(TelegramLogsHandler(tbot, telegram_id))
     headers = {
         'Authorization': 'Token {}'.format(dvmn_token)
     }
     payload = {}
-    logging.warning('Бот запущен')
+    logger.debug('Бот запущен')
     while True:
         try:
             response = requests.get(
