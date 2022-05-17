@@ -44,7 +44,7 @@ def main():
                 tbot.sendMessage(telegram_id, message)
             payload['timestamp'] = review_info['last_attempt_timestamp']
         elif review_info['status'] == 'timeout':
-            payload['timestamp'] = response['timestamp_to_request']
+            payload['timestamp'] = review_info['timestamp_to_request']
 
 
 if __name__ == '__main__':
