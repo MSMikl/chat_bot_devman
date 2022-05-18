@@ -10,14 +10,14 @@ import telegram
 
 class TelegramLogsHandler(logging.Handler):
 
-    def __init__(self, tg_bot, chat_id):
+    def __init__(self, tg_token, chat_id):
         super().__init__()
         self.chat_id = chat_id
-        self.tg_bot = tg_bot
+        self.logger_bot = telegram.Bot(token=tg_token)
 
     def emit(self, record):
         log_entry = self.format(record)
-        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+        self.logger_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 def main():
@@ -28,7 +28,7 @@ def main():
     tbot = telegram.Bot(token=tg_token)
     logger = logging.getLogger('tbot')
     logger.setLevel(logging.DEBUG)
-    logger.addHandler(TelegramLogsHandler(tbot, telegram_id))
+    logger.addHandler(TelegramLogsHandler(tg_token, telegram_id))
     headers = {
         'Authorization': 'Token {}'.format(dvmn_token)
     }
@@ -44,8 +44,8 @@ def main():
             response.raise_for_status()
         except requests.exceptions.ReadTimeout:
             continue
-        except requests.exceptions.ConnectionError:
-            logger.warning('Потеряно соединение с сервером')
+        except requests.exceptions.ConnectionError as err:
+            logger.exception(err, exc_info=True)
             sleep(5)
             continue
         review_info = response.json()
