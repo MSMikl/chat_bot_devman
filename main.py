@@ -3,6 +3,7 @@ from time import sleep
 import logging
 import os
 
+import dotenv
 import requests
 import telegram
 
@@ -20,6 +21,7 @@ class TelegramLogsHandler(logging.Handler):
 
 
 def main():
+    dotenv.load_dotenv()
     dvmn_token = os.getenv('DEVMAN_TOKEN')
     telegram_id = int(os.getenv('TG_USER_ID'))
     tg_token = os.getenv('TELEGRAM_TOKEN')
@@ -43,7 +45,7 @@ def main():
         except requests.exceptions.ReadTimeout:
             continue
         except requests.exceptions.ConnectionError:
-            print('Потеряно соединение с сервером')
+            logger.warning('Потеряно соединение с сервером')
             sleep(5)
             continue
         review_info = response.json()
